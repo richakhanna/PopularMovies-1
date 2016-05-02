@@ -28,8 +28,6 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private static Context mContext;
     private static List<Movie> mDatasetList;
-    private static final int PERSON_CONTACT_DETAIL = 0;
-    private static final int ANIMAL_CONTACT_DETAIL = 1;
     // Allows to remember the last item shown on screen
     private int lastAnimatedItemPosition = -1;
     public static final String ARG_MOVIE_DETAIL = "MOVIE_DETAIL";
@@ -89,19 +87,6 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @Override
         public boolean onLongClick(View v) {
             int itemPosition = getAdapterPosition();
-            if (itemPosition != RecyclerView.NO_POSITION) {
-                Movie movie = mDatasetList.get(itemPosition);
-
-                //If delete button is already shown, hide it by setting flag to false
-                //And the item will be updated when onBindViewHolder will be called.
-                if (movie.isToShowDeleteIcon()) {
-                    movie.setToShowDeleteIcon(false);
-                } else {
-                    movie.setToShowDeleteIcon(true);
-                }
-
-                notifyItemChanged(itemPosition);
-            }
             return true;
         }
     }
@@ -112,13 +97,7 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_item_view, parent, false);
-
-        switch (viewType) {
-            case PERSON_CONTACT_DETAIL:
-            case ANIMAL_CONTACT_DETAIL:
-                return new MovieViewHolder(view);
-        }
-        return null;
+        return new MovieViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -133,16 +112,6 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         PabloPicasso.with(mContext).load(completePosterPath).placeholder(R.mipmap.placeholder)
                 .into(cusHolder.mIVThumbNail);
         cusHolder.mIVThumbNail.setVisibility(View.VISIBLE);
-
-//        if (mDatasetList.get(position).isToShowDeleteIcon()) {
-//            String completePosterPath = BASE_URL_IMAGE_POSTER + mDatasetList.get(position).getPosterPath();
-//            PabloPicasso.with(mContext).load(completePosterPath).noPlaceholder()
-//                    .into(cusHolder.mIVThumbNail);
-//            cusHolder.mIVThumbNail.setVisibility(View.VISIBLE);
-//        } else {
-//            cusHolder.mIVThumbNail.setVisibility(View.GONE);
-//        }
-
         setEnterAnimation(cusHolder.mCardView, position);
     }
 
@@ -152,35 +121,12 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return mDatasetList.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-//        Movie movie = mDatasetList.get(position);
-//        String contactType = movie.getType();
-//        if (contactType.equalsIgnoreCase("Animal")) {
-//            return ANIMAL_CONTACT_DETAIL;
-//        }
-        return PERSON_CONTACT_DETAIL;
-    }
-
     private void setEnterAnimation(View viewToAnimate, int position) {
         // If the bound view wasn't previously displayed on screen, it will be animated
         if (position > lastAnimatedItemPosition) {
             //Animation using xml
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.translate_left);
             viewToAnimate.startAnimation(animation);
-
-//            Or Animation using ObjectAnimator
-//            ObjectAnimator anim = ObjectAnimator.ofFloat(viewToAnimate, "translationX", 300, 0);
-//            anim.setDuration(1500);
-//            DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator(2);
-//            anim.setInterpolator(decelerateInterpolator);
-//            anim.start();
-
-//            Or Animation using setTranslationX
-//            viewToAnimate.setTranslationX(300);
-//            viewToAnimate.animate().translationX(0).
-//                    setInterpolator(new DecelerateInterpolator(2)).setDuration(1500).start();
-
             lastAnimatedItemPosition = position;
         }
     }

@@ -31,7 +31,6 @@ public class Movie implements Parcelable {
     private boolean video;
     @SerializedName("vote_average")
     private double voteAverage;
-    private boolean isToShowDeleteIcon;
 
     public String getPosterPath() {
         return DataManager.BASE_URL_IMAGE_POSTER + posterPath;
@@ -85,14 +84,6 @@ public class Movie implements Parcelable {
         return voteAverage;
     }
 
-    public void setToShowDeleteIcon(boolean toShowDeleteIcon) {
-        isToShowDeleteIcon = toShowDeleteIcon;
-    }
-
-    public boolean isToShowDeleteIcon() {
-        return isToShowDeleteIcon;
-    }
-
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         public Movie createFromParcel(Parcel source) {
             Movie movie = new Movie();
@@ -109,7 +100,6 @@ public class Movie implements Parcelable {
             movie.voteCount = source.readInt();
             movie.video = source.readByte() != 0;
             movie.voteAverage = source.readDouble();
-            movie.isToShowDeleteIcon = source.readByte() != 0;
 
             return movie;
         }
@@ -139,7 +129,6 @@ public class Movie implements Parcelable {
         dest.writeInt(voteCount);
         dest.writeByte((byte) (video ? 1 : 0));
         dest.writeDouble(voteAverage);
-        dest.writeByte((byte) (isToShowDeleteIcon ? 1 : 0));
     }
 
 
@@ -151,7 +140,6 @@ public class Movie implements Parcelable {
                 + originalLanguage + ", title: " + title + ", backdropPath: " + backdropPath
                 + ", popularity: " + popularity + ", voteCount: "
                 + voteCount + ", video: " + video
-                + ", voteAverage: " + voteAverage + ", isToShowDeleteIcon: "
-                + isToShowDeleteIcon + "}";
+                + ", voteAverage: " + voteAverage + "}";
     }
 }
